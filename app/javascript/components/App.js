@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import './App.css';
-import TodoList from './TodoList'
+import TodoTable from './TodoTable'
 import Header from './Header'
 import styled from 'styled-components'
 
 const AppContainer = styled.div`
-  width: 50%;
+  width: 100%;
   height: 800px;
   position: relative;
   margin: 0 auto;
@@ -16,7 +15,7 @@ const App = () => {
   return (
     <AppContainer>
       <Header />
-      <TodoList />
+      <TodoTable />
     </AppContainer>
   );
 }
