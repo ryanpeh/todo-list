@@ -1,5 +1,4 @@
-import React, { useState, useEffect} from 'react';
-import { forwardRef } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import Grid from '@material-ui/core/Grid'
 import MaterialTable from "material-table";
 import AddBox from '@material-ui/icons/AddBox';
@@ -81,9 +80,11 @@ function TodoTable() {
 
     axios.post("/todos", newData)
     .then(res => {
-      let dataToAdd = [...data];
-      dataToAdd.push(newData);
-      setData(dataToAdd);
+      // setData([...data, newData]); This doesn't update the ID, so below is my temporary workaround for it while I figure it out
+      axios.get("/todos")
+        .then(res => {               
+            setData(res.data)
+         })
       resolve()
     })
   }
@@ -115,13 +116,13 @@ function TodoTable() {
               data={data}
               icons={tableIcons}
               options={{
-                paging: false
+                paging: false,
+                addRowPosition: "first"
               }}
               editable={{
                 onRowUpdate: (newData, oldData) =>
                   new Promise((resolve) => {
                     updateRow(newData, oldData, resolve);
-                      
                   }),
                 onRowAdd: (newData) =>
                   new Promise((resolve) => {
