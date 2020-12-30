@@ -59,6 +59,8 @@ function TodoTable() {
          })
   }, [])
 
+  
+
   const updateRow = (newData, oldData, resolve) => {
 
     axios.patch("/todos/"+newData.id, newData)
