@@ -10,16 +10,16 @@ todos = Todo.create([
     {
       title: "Task 1",
       description: "Description 1",
-      done: false
+      completed: false
     },
     {
       title: "Task 2",
       description: "Description 2",
-      done: false
+      completed: false
     },
     {
       title: "Task 3",
       description: "Description 3",
-      done: false
+      completed: false
     },
   ])

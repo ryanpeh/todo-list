@@ -1,5 +1,11 @@
-# README
+# To-do list Project for CVWO
 
-Peh Kai Min, Ryan
+Name: Peh Kai Min, Ryan
 
-A0219687L
+ID: A0219687L
+
+
+# Deployment
+
+Application deployed at:
+

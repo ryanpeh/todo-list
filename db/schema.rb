@@ -18,8 +18,9 @@ ActiveRecord::Schema.define(version: 2020_12_27_181314) do
   create_table "todos", force: :cascade do |t|
     t.string "title"
     t.string "description"
-    t.string "group"
-    t.boolean "done"
+    t.string "tags"
+    t.boolean "completed"
+    t.datetime "due_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
