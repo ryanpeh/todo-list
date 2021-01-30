@@ -142,6 +142,16 @@ const TodoTable = () => {
       },
     },
     {
+      title: "Tags",
+      field: "tags",
+      cellStyle: {
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        maxWidth: 100,
+      },
+    },
+    {
       title: "Due Date",
       field: "due_date",
       render: (rowData) => convertDate(rowData.due_date),
