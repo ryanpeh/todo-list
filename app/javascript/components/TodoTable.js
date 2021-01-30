@@ -19,12 +19,15 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent"
+import DialogContentText from "@material-ui/core/DialogContentText"
+import DialogActions from "@material-ui/core/DialogActions"
 import axios from "axios";
 import Dialog from "@material-ui/core/Dialog";
 import Form from "./Form";
-import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
+import Typography from "@material-ui/core/Typography";
+import { withStyles } from "@material-ui/core/styles";
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
@@ -64,7 +67,7 @@ const styles = (theme) => ({
     padding: theme.spacing(2),
   },
   closeButton: {
-    position: 'absolute',
+    position: "absolute",
     right: theme.spacing(1),
     top: theme.spacing(1),
     color: theme.palette.grey[500],
@@ -77,7 +80,11 @@ const DialogTitle = withStyles(styles)((props) => {
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
       <Typography variant="h6">{children}</Typography>
       {onClose ? (
-        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+        <IconButton
+          aria-label="close"
+          className={classes.closeButton}
+          onClick={onClose}
+        >
           <CloseIcon />
         </IconButton>
       ) : null}
@@ -89,11 +96,17 @@ const convertDate = (date) => {
   if (date == null) {
     return null;
   } else {
-    return date.slice(0, 10).split("-").reverse().join("-");
+    return JSON.stringify(date).slice(1, 11).split("-").reverse().join("-");
+    //return JSON.stringify(date);
   }
 };
 
 const TodoTable = () => {
+  const [data, setData] = useState([]); //table data
+  const [selectedData, setSelectedData] = useState({title:"",description:""});
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+
   var columns = [
     {
       title: "",
@@ -129,7 +142,7 @@ const TodoTable = () => {
       },
     },
     {
-      title: "Dates",
+      title: "Due Date",
       field: "due_date",
       render: (rowData) => convertDate(rowData.due_date),
       editComponent: ({ value, onChange }) => (
@@ -149,12 +162,12 @@ const TodoTable = () => {
     },
   ];
 
-  const [data, setData] = useState([]); //table data
-  const [IsFormOpen, setIsFormOpen] = useState(false);
-
-
   const closeForm = (e) => {
     setIsFormOpen(false);
+  };
+
+  const closeAlert = (e) => {
+    setIsAlertOpen(false);
   };
 
   useEffect(() => {
@@ -222,8 +235,13 @@ const TodoTable = () => {
       });
   };
 
-  
-  
+  const expandRow = (selectedRow) => {
+    setSelectedData({
+      title: selectedRow.title,
+      description: selectedRow.description
+    });
+    setIsAlertOpen(true);
+  };
 
   return (
     <div className="App">
@@ -231,7 +249,7 @@ const TodoTable = () => {
         <Grid item xs={2}></Grid>
         <Grid item xs={8}>
           <MaterialTable
-            title="Table"
+            title=""
             columns={columns}
             data={data}
             icons={tableIcons}
@@ -242,6 +260,7 @@ const TodoTable = () => {
               actionsColumnIndex: -1,
               selectionProps: (rowData) => 1,
             }}
+            onRowClick={(evt, selectedRow) => expandRow(selectedRow)}
             actions={[
               {
                 icon: AddBox,
@@ -268,14 +287,34 @@ const TodoTable = () => {
       </Grid>
       <Dialog
         title="Add Todo"
-        open={IsFormOpen}
+        open={isFormOpen}
         onClose={closeForm}
         maxWidth="lg"
       >
-        <DialogTitle id="customized-dialog-title" onClose={closeForm}>
+        <DialogTitle onClose={closeForm}>
           Add Todo
         </DialogTitle>
         <Form onSubmit={addRow} closeForm={closeForm} />
+      </Dialog>
+      <Dialog
+        open={isAlertOpen}
+        onClose={closeAlert}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle>
+          {selectedData.title}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {selectedData.description}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeAlert} color="primary">
+            Close
+          </Button>
+        </DialogActions>
       </Dialog>
     </div>
   );
